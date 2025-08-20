@@ -1,42 +1,199 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
-body{
+
+body {
     font-family: 'Inter', sans-serif;
+    margin: 0;
+    padding: 20px;
+    background-color: #f0f2f5;
 }
-.chat-box{
+
+/* Room Interface Styles */
+.room-interface {
+    max-width: 600px;
+    margin: 50px auto;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    padding: 30px;
+}
+
+.room-header h2 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 30px;
+}
+
+.room-status {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.room-info {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.room-info p {
+    margin: 5px 0;
+    color: #666;
+}
+
+#room-id-display {
+    font-family: monospace;
+    font-weight: bold;
+    color: #333;
+    font-size: 1.2em;
+}
+
+.room-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    align-items: center;
+}
+
+.copy-btn {
+    background: #256aff;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background 0.3s;
+}
+
+.copy-btn:hover {
+    background: #1a5ce6;
+}
+
+.copy-btn.copied {
+    background: #28a745;
+}
+
+.join-section {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+#room-id-input {
+    padding: 10px 15px;
+    border: 2px solid #ddd;
+    border-radius: 25px;
+    outline: none;
+    min-width: 150px;
+}
+
+#room-id-input:focus {
+    border-color: #256aff;
+}
+
+#join-room-btn {
+    background: #28a745;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 25px;
+    cursor: pointer;
+}
+
+#join-room-btn:hover {
+    background: #218838;
+}
+
+/* Chat Container Styles */
+.chat-container {
+    max-width: 800px;
+    margin: 20px auto;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    overflow: hidden;
+}
+
+.chat-header {
+    background: #256aff;
+    color: white;
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.chat-box {
     display: flex;
     flex-direction: column;
     gap: 10px;
     background-color: #f4f4f4;
-    width: 80%;
-    height: 90vh;
-    margin: auto auto;
-    border: 1px solid #ccc;
-     overflow-y: scroll;
-    
+    height: 60vh;
+    overflow-y: scroll;
+    padding: 0;
 }
+
+#messages {
+    flex: 1;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
 input {
     background-color: white;
     border-radius: 2rem;
-    padding: 5px 10px;
+    padding: 10px 15px;
     border: none;
-   margin: 10px 0;
-   outline: 1px solid rgb(37, 106, 255);
+    margin: 10px;
+    outline: 1px solid rgb(37, 106, 255);
+    flex: 1;
 }
-form{
+
+form {
     margin-top: auto;
-    align-self: center;
+    display: flex;
+    padding: 10px;
+    background: white;
+    border-top: 1px solid #eee;
+    align-items: center;
 }
-form button{
+
+form button {
     background-color: rgb(37, 106, 255);
     border-radius: 5rem;
     border: none;
-    padding: 5px 10px;
+    padding: 10px 20px;
+    color: white;
+    cursor: pointer;
+    margin-left: 10px;
+    height: max-content;
+
 }
-.message{
-    width: max-content;
-    padding: 5px 10px;
+
+form button:hover {
+    background-color: #1a5ce6;
+}
+
+.message {
+    max-width: 70%;
+    padding: 10px 15px;
+    border-radius: 15px;
+    margin: 5px 0;
+    word-wrap: break-word;
+}
+
+/* Status messages */
+.status-message {
+    text-align: center;
+    color: #666;
+    font-style: italic;
+    padding: 10px;
+    background: #e9ecef;
     border-radius: 10px;
-    margin: 5px 5px;
-    text-align: right;
-    
+    margin: 10px 0;
 }

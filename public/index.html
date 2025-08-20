@@ -3,18 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Socket Chat</title>
     <link rel="stylesheet" href="styles.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <script src="/socket.io/socket.io.min.js"></script>
 </head>
 <body>
-    <div class="chat-box">
-    <div id="messages"></div>
-    <form id="my-form">
-        <input type="text">
-        <button type="submit">Send</button>
-    </form></div>
+    <!-- Room sharing interface -->
+    <div id="room-interface" class="room-interface">
+        <div class="room-header">
+            <h2>Private Chat Room</h2>
+            <div id="room-status" class="room-status">
+                <div id="room-info" class="room-info">
+                    <p>Room ID: <span id="room-id-display"></span></p>
+                    <p>Status: <span id="connection-status">Waiting for someone to join...</span></p>
+                </div>
+                <div id="room-actions" class="room-actions">
+                    <button id="copy-link-btn" class="copy-btn">📋 Copy Room Link</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chat interface (initially hidden) -->
+    <div id="chat-container" class="chat-container" style="display: none;">
+        <div class="chat-header">
+            <span id="chat-room-id"></span>
+            <span id="user-count">1/2 users</span>
+        </div>
+        <div class="chat-box">
+            <div id="messages"></div>
+            <form id="my-form">
+                <input type="text" placeholder="Type your message...">
+                <button type="submit">Send</button>
+            </form>
+        </div>
+    </div>
+
     <script src="script.js"></script>
 </body>
 </html>
