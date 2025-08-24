@@ -1,25 +1,52 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Eagle+Lake&display=swap');
+@font-face {
+    font-family: 'Scorched Earth';
+    src: url('./fonts/Scorchedearth-4Ljp.otf') format('opentype');
+    font-display: swap;
+}
 
+@font-face {
+    font-family: 'Marine Corps';
+    src: url('./fonts/MarineCorpsPersonalUsed-ax9Mo.otf') format('opentype');
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Progress';
+    src: url('./fonts/ProgressPersonalUse-EaJdz.ttf') format('truetype');
+    font-display: swap;
+}
+:root{
+    --light-green: #007B38;
+    --med-green: #112A1C;
+    --dark-green: #0A0F09;
+}
 body {
-    font-family: 'Inter', sans-serif;
+   
     margin: 0;
     padding: 20px;
-    background-color: #f0f2f5;
+    background-image: url('/images/background.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    height: 100vh;
+    overflow: hidden;
 }
 
 /* Room Interface Styles */
 .room-interface {
     max-width: 600px;
     margin: 50px auto;
-    background: white;
-    border-radius: 15px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    background: url('https://images.pexels.com/photos/235985/pexels-photo-235985.jpeg');
+    background-size: cover;
+    filter: brightness(0.8);
+font-family:  'Progress';
+   
     padding: 30px;
 }
 
 .room-header h2 {
     text-align: center;
-    color: #333;
+    color: #112A1C;
     margin-bottom: 30px;
 }
 
@@ -27,25 +54,28 @@ body {
     display: flex;
     flex-direction: column;
     gap: 20px;
+
 }
 
 .room-info {
-    background: #f8f9fa;
-    padding: 20px;
-    border-radius: 10px;
+    background: #0A0F09;
+    padding: 10px;
+   
     text-align: center;
 }
 
 .room-info p {
     margin: 5px 0;
     color: #666;
+    font-family: 'eagle lake';
 }
 
 #room-id-display {
-    font-family: monospace;
+   
     font-weight: bold;
-    color: #333;
-    font-size: 1.2em;
+    color: var(--light-green);
+    font-size: 1rem;
+    font-family:  'Eagle Lake';
 }
 
 .room-actions {
@@ -56,23 +86,17 @@ body {
 }
 
 .copy-btn {
-    background: #256aff;
-    color: white;
+    background: var(--med-green);
+    color: rgb(206, 206, 206);
     border: none;
     padding: 12px 24px;
-    border-radius: 25px;
+    
     cursor: pointer;
     font-size: 16px;
     transition: background 0.3s;
+    font-family: 'Eagle Lake';
 }
 
-.copy-btn:hover {
-    background: #1a5ce6;
-}
-
-.copy-btn.copied {
-    background: #28a745;
-}
 
 .join-section {
     display: flex;
@@ -85,55 +109,62 @@ body {
 #room-id-input {
     padding: 10px 15px;
     border: 2px solid #ddd;
-    border-radius: 25px;
+
     outline: none;
     min-width: 150px;
 }
 
-#room-id-input:focus {
-    border-color: #256aff;
-}
 
-#join-room-btn {
-    background: #28a745;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 25px;
-    cursor: pointer;
-}
-
-#join-room-btn:hover {
-    background: #218838;
-}
 
 /* Chat Container Styles */
 .chat-container {
     max-width: 800px;
     margin: 20px auto;
-    background: white;
-    border-radius: 15px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    /* background: white; */
+    
+  
     overflow: hidden;
 }
 
 .chat-header {
-    background: #256aff;
-    color: white;
+    background: var(--dark-green);
+    color: var(--light-green);
     padding: 15px 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    font-family: 'Eagle Lake';
+    font-size: 0.7rem;
 }
 
 .chat-box {
     display: flex;
     flex-direction: column;
     gap: 10px;
-    background-color: #f4f4f4;
-    height: 60vh;
+    background: #0a0f09bd;
+    font-family: 'Eagle Lake' !important;
+    height: 70vh;
     overflow-y: scroll;
     padding: 0;
+    outline: 1px solid var(--light-green);
+}
+
+/* Scrollbar styling for chat-box */
+.chat-box::-webkit-scrollbar {
+    width: 12px;
+}
+
+.chat-box::-webkit-scrollbar-track {
+    background: var(--dark-green);
+}
+
+.chat-box::-webkit-scrollbar-thumb {
+    background: var(--med-green);
+    /* border-radius: 6px; */
+}
+
+.chat-box::-webkit-scrollbar-thumb:hover {
+    background: var(--light-green);
 }
 
 #messages {
@@ -142,47 +173,48 @@ body {
     display: flex;
     flex-direction: column;
     gap: 10px;
+    font-family: 'Eagle Lake' !important;
 }
 
 input {
-    background-color: white;
-    border-radius: 2rem;
+    background-color: transparent;
+
     padding: 10px 15px;
     border: none;
     margin: 10px;
-    outline: 1px solid rgb(37, 106, 255);
+    outline: 1px solid var(--light-green);
     flex: 1;
+    font-family: 'Eagle Lake','serif' ;
+    color: var(--light-green);
+    border-radius: 0px !important;
 }
 
 form {
     margin-top: auto;
     display: flex;
     padding: 10px;
-    background: white;
-    border-top: 1px solid #eee;
+    
     align-items: center;
 }
 
 form button {
-    background-color: rgb(37, 106, 255);
-    border-radius: 5rem;
-    border: none;
+    background-color: var(--dark-green);
+
+    border: 1px solid var(--light-green);
     padding: 10px 20px;
     color: white;
     cursor: pointer;
-    margin-left: 10px;
+    margin-left: 5px;
     height: max-content;
 
 }
 
-form button:hover {
-    background-color: #1a5ce6;
-}
+
 
 .message {
     max-width: 70%;
-    padding: 10px 15px;
-    border-radius: 15px;
+    padding: 5px 15px;
+ font-size: 0.8rem;
     margin: 5px 0;
     word-wrap: break-word;
 }
@@ -190,10 +222,11 @@ form button:hover {
 /* Status messages */
 .status-message {
     text-align: center;
-    color: #666;
+    color: var(--light-green);
     font-style: italic;
-    padding: 10px;
-    background: #e9ecef;
-    border-radius: 10px;
+    padding: 2px 5px;
+    background: var(--dark-green);
+
+font-size: 0.8rem;
     margin: 10px 0;
 }

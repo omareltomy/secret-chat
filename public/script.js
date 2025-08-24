@@ -56,12 +56,31 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Copy link button
     copyLinkBtn.addEventListener('click', () => {
-        const roomUrl = `https://j3kjvmlc-3000.uks1.devtunnels.ms/?room=${currentRoomId}`;
-        navigator.clipboard.writeText(roomUrl);
-        copyLinkBtn.textContent = '✅ Copied!';
-        setTimeout(() => {
-            copyLinkBtn.textContent = '📋 Copy Room Link';
-        }, 2000);
+        const roomUrl = `${window.location.origin}/?room=${currentRoomId}`;
+        navigator.clipboard.writeText(roomUrl).then(() => {
+            copyLinkBtn.textContent = 'Copied!';
+            setTimeout(() => {
+                copyLinkBtn.textContent = 'Copy Room Link';
+            }, 2000);
+        }).catch(err => {
+            console.error('Failed to copy: ', err);
+            // Fallback for older browsers
+            const textArea = document.createElement('textarea');
+            textArea.value = roomUrl;
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            try {
+                document.execCommand('copy');
+                copyLinkBtn.textContent = 'Copied!';
+            } catch (err) {
+                copyLinkBtn.textContent = 'Copy failed';
+            }
+            document.body.removeChild(textArea);
+            setTimeout(() => {
+                copyLinkBtn.textContent = 'Copy Room Link';
+            }, 2000);
+        });
     });
     
     // Message form
@@ -97,29 +116,56 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Wait for socket connection
     socket.on('connect', async () => {
+        console.log('Connected to server');
         myId = socket.id;
         
-        // Generate RSA key pair
-        myKeyPair = await generateKeyPair();
-        const publicKeyData = await exportPublicKey(myKeyPair.publicKey);
-        
-        if (roomParam) {
-            // Join specific room from URL
-            socket.emit('join-room', {
-                roomId: roomParam.toUpperCase(),
-                publicKey: publicKeyData
-            });
-        } else {
-            // Create new room
-            socket.emit('create-room', {
-                publicKey: publicKeyData
-            });
+        try {
+            // Generate RSA key pair
+            myKeyPair = await generateKeyPair();
+            const publicKeyData = await exportPublicKey(myKeyPair.publicKey);
+            
+            if (roomParam) {
+                // Join specific room from URL
+                socket.emit('join-room', {
+                    roomId: roomParam.toUpperCase(),
+                    publicKey: publicKeyData
+                });
+            } else {
+                // Create new room
+                socket.emit('create-room', {
+                    publicKey: publicKeyData
+                });
+            }
+        } catch (error) {
+            console.error('Failed to generate encryption keys:', error);
+            alert('Failed to initialize encryption. Please refresh the page.');
+        }
+    });
+    
+    // Connection error handling
+    socket.on('disconnect', (reason) => {
+        console.log('Disconnected from server:', reason);
+        if (reason === 'io server disconnect') {
+            socket.connect();
+        }
+    });
+
+    socket.on('connect_error', (error) => {
+        console.error('Connection error:', error);
+        if (connectionStatus) {
+            connectionStatus.textContent = 'Connection failed. Retrying...';
+            connectionStatus.style.color = '#ff0000';
+        }
+    });
+
+    socket.on('reconnect', (attemptNumber) => {
+        console.log('Reconnected after', attemptNumber, 'attempts');
+        if (connectionStatus) {
+            connectionStatus.textContent = 'Reconnected!';
+            connectionStatus.style.color = '#28a745';
         }
     });
 });
-
-// Socket events
-socket.on('room-created', (data) => {
     currentRoomId = data.roomId;
     userCount = data.userCount;
     showRoomInfo();
@@ -153,7 +199,7 @@ socket.on('user-joined', async (data) => {
     
     if (data.userCount === 2) {
         showChat();
-        addMessage("Someone joined the chat! 🔐", false, true);
+        addMessage("Someone joined the chat!", false, true);
     }
 });
 
@@ -183,9 +229,9 @@ function showRoomInfo() {
     
     if (userCount === 1) {
         connectionStatus.textContent = "Waiting for someone to join...";
-        connectionStatus.style.color = "#ff6b35";
+        connectionStatus.style.color = "#d02d00ff";
     } else {
-        connectionStatus.textContent = "Connected! 🔐";
+        connectionStatus.textContent = "Connected!";
         connectionStatus.style.color = "#28a745";
     }
     
@@ -197,7 +243,7 @@ function showRoomInfo() {
 function showChat() {
     roomInterface.style.display = 'none';
     chatContainer.style.display = 'block';
-    document.getElementById('chat-room-id').textContent = `Room: ${currentRoomId} 🔐`;
+    document.getElementById('chat-room-id').textContent = `Room: ${currentRoomId}`;
     document.getElementById('user-count').textContent = `${userCount}/2 users`;
 }
 
@@ -219,11 +265,11 @@ function addMessage(messageText, isMyMessage, isStatus = false) {
         message.textContent = messageText;
         
         if (isMyMessage) {
-            message.style.backgroundColor = "#256aff";
-            message.style.color = "white";
+            message.style.backgroundColor = "var(--light-green)";
+            message.style.color = "#e5e5e5ff";
             message.style.alignSelf = "flex-end";
         } else {
-            message.style.backgroundColor = "#eee";
+            message.style.backgroundColor = "#b1b1b1ff";
             message.style.color = "black";
             message.style.alignSelf = "flex-start";
         }

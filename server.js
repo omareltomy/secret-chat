@@ -1,14 +1,48 @@
 import { Server } from "socket.io";
 import express from "express";
-import { createServer } from "http"
+import { createServer } from "http";
+import path from "path";
+import { fileURLToPath } from "url";
+
+// ES Module __dirname equivalent
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
+const PORT = process.env.PORT || 3000;
+const NODE_ENV = process.env.NODE_ENV || 'development';
 
+// Security middleware
 app.use(express.static('public'));
+app.disable('x-powered-by');
+
+// Serve static files
+app.use(express.static(path.join(__dirname, 'public')));
+
+// Health check endpoint
+app.get('/health', (req, res) => {
+    res.status(200).json({ 
+        status: 'OK', 
+        timestamp: new Date().toISOString(),
+        uptime: process.uptime()
+    });
+});
 
 const httpServer = createServer(app);
 
-const io = new Server(httpServer, { cors: ['localhost:3000','https://j3kjvmlc-3000.uks1.devtunnels.ms'] });
+// Production-ready CORS configuration
+const corsOptions = {
+    origin: NODE_ENV === 'production' 
+        ? [process.env.CLIENT_URL, /\.railway\.app$/, /\.up\.railway\.app$/]
+        : ['http://localhost:3000', 'http://127.0.0.1:3000'],
+    methods: ["GET", "POST"],
+    credentials: true
+};
+
+const io = new Server(httpServer, { 
+    cors: corsOptions,
+    transports: ['websocket', 'polling']
+});
 
 const rooms = new Map();
 const userRooms = new Map();
@@ -128,6 +162,26 @@ function leaveCurrentRoom(socket) {
 function getUserRoom(socketId) {
   return userRooms.get(socketId);
 }
-httpServer.listen(3000, () => {
-    console.log(`server started on port 3000`)
+
+// Graceful shutdown
+process.on('SIGTERM', () => {
+    console.log('SIGTERM received, shutting down gracefully');
+    httpServer.close(() => {
+        console.log('Process terminated');
+    });
+});
+
+process.on('SIGINT', () => {
+    console.log('SIGINT received, shutting down gracefully');
+    httpServer.close(() => {
+        console.log('Process terminated');
+    });
+});
+
+httpServer.listen(PORT, '0.0.0.0', () => {
+    console.log(`🚀 Server running on port ${PORT} in ${NODE_ENV} mode`);
+    console.log(`🌐 Environment: ${NODE_ENV}`);
+    if (NODE_ENV === 'development') {
+        console.log(`🔗 Local: http://localhost:${PORT}`);
+    }
 })
