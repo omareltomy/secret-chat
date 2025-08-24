@@ -47,11 +47,22 @@ npm run dev
 
 ### Production Deployment
 
-The app is configured for deployment on Railway:
+The app is configured for deployment on **Railway** or **Render**:
 
+#### Deploy on Render (Recommended):
+1. Push to GitHub
+2. Go to [render.com](https://render.com)
+3. Create "New Web Service" from your GitHub repo
+4. Use build command: `npm install`
+5. Use start command: `npm start`
+6. Deploy automatically!
+
+#### Deploy on Railway:
 1. Push to GitHub
 2. Connect repository to Railway
 3. Deploy automatically
+
+See `RENDER_DEPLOYMENT.md` for detailed Render instructions.
 
 ## Environment Variables
 

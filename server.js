@@ -33,7 +33,13 @@ const httpServer = createServer(app);
 // Production-ready CORS configuration
 const corsOptions = {
     origin: NODE_ENV === 'production' 
-        ? [process.env.CLIENT_URL, /\.railway\.app$/, /\.up\.railway\.app$/]
+        ? [
+            process.env.CLIENT_URL, 
+            /\.railway\.app$/, 
+            /\.up\.railway\.app$/,
+            /\.onrender\.com$/,
+            /\.render\.com$/
+          ]
         : ['http://localhost:3000', 'http://127.0.0.1:3000'],
     methods: ["GET", "POST"],
     credentials: true
