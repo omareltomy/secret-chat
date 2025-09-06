@@ -3,6 +3,7 @@ import express from "express";
 import { createServer } from "http";
 import path from "path";
 import { fileURLToPath } from "url";
+import fs from "fs";
 
 // ES Module __dirname equivalent
 const __filename = fileURLToPath(import.meta.url);
@@ -13,11 +14,18 @@ const PORT = process.env.PORT || 3000;
 const NODE_ENV = process.env.NODE_ENV || 'development';
 
 // Security middleware
-app.use(express.static('public'));
 app.disable('x-powered-by');
 
-// Serve static files
-app.use(express.static(path.join(__dirname, 'public')));
+// Serve static files with proper headers
+app.use(express.static(path.join(__dirname, 'public'), {
+    maxAge: NODE_ENV === 'production' ? '1d' : 0,
+    etag: false
+}));
+
+// Serve index.html for root route
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
 
 // Health check endpoint
 app.get('/health', (req, res) => {
@@ -188,9 +196,18 @@ process.on('SIGINT', () => {
 });
 
 httpServer.listen(PORT, '0.0.0.0', () => {
-    console.log(`🚀 Server running on port ${PORT} in ${NODE_ENV} mode`);
+    console.log(`🚀 Secret Chat server running on port ${PORT}`);
     console.log(`🌐 Environment: ${NODE_ENV}`);
-    if (NODE_ENV === 'development') {
-        console.log(`🔗 Local: http://localhost:${PORT}`);
+    console.log(`📁 Serving static files from: ${path.join(__dirname, 'public')}`);
+    console.log(`🔗 Access your app at: http://localhost:${PORT}`);
+    
+    // Verify public directory exists
+    const publicPath = path.join(__dirname, 'public');
+    if (fs.existsSync(publicPath)) {
+        console.log(`✅ Public directory found: ${publicPath}`);
+        const files = fs.readdirSync(publicPath);
+        console.log(`📋 Static files: ${files.join(', ')}`);
+    } else {
+        console.log(`❌ Public directory not found: ${publicPath}`);
     }
 })
