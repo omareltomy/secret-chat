@@ -35,6 +35,9 @@ const corsOptions = {
     origin: NODE_ENV === 'production' 
         ? [
             process.env.CLIENT_URL, 
+            /\.digitaloceanspaces\.com$/,
+            /\.ondigitalocean\.app$/,
+            /\.do\.co$/,
             /\.railway\.app$/, 
             /\.up\.railway\.app$/,
             /\.onrender\.com$/,

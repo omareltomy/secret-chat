@@ -1,7 +1,7 @@
 {
   "name": "secure-chat-app",
   "version": "1.0.0",
-  "description": "End-to-end encrypted chat application with RSA encryption",
+  "description": "End-to-end encrypted chat application with RSA encryption - Optimized for DigitalOcean App Platform",
   "main": "server.js",
   "type": "module",
   "engines": {
@@ -14,7 +14,7 @@
     "build": "echo 'No build step required'",
     "test": "echo 'No tests specified'"
   },
-  "keywords": ["chat", "socket.io", "encryption", "real-time"],
+  "keywords": ["chat", "socket.io", "encryption", "real-time", "digitalocean"],
   "author": "Your Name",
   "license": "MIT",
   "dependencies": {

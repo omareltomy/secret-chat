@@ -1,0 +1,32 @@
+name: secure-chat-app
+services:
+- name: web
+  source_dir: /
+  github:
+    repo: your-username/secret-chat
+    branch: main
+  run_command: npm start
+  build_command: npm install
+  environment_slug: node-js
+  instance_count: 1
+  instance_size_slug: basic-xxs
+  envs:
+  - key: NODE_ENV
+    value: production
+  - key: CLIENT_URL
+    value: ${APP_URL}
+  http_port: 3000
+  health_check:
+    http_path: /health
+  routes:
+  - path: /
+  cors:
+    allow_origins:
+    - exact: ${APP_URL}
+    allow_methods:
+    - GET
+    - POST
+    - OPTIONS
+    allow_headers:
+    - Content-Type
+    - Authorization

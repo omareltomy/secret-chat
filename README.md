@@ -47,22 +47,20 @@ npm run dev
 
 ### Production Deployment
 
-The app is configured for deployment on **Railway** or **Render**:
+The app is configured for deployment on **DigitalOcean App Platform** (recommended):
 
-#### Deploy on Render (Recommended):
+#### Deploy on DigitalOcean (Recommended):
 1. Push to GitHub
-2. Go to [render.com](https://render.com)
-3. Create "New Web Service" from your GitHub repo
-4. Use build command: `npm install`
-5. Use start command: `npm start`
-6. Deploy automatically!
+2. Go to [DigitalOcean Apps](https://cloud.digitalocean.com/apps)
+3. Create App from GitHub repository
+4. DigitalOcean auto-detects configuration from `.do/app.yaml`
+5. Deploy with enterprise-grade infrastructure!
 
-#### Deploy on Railway:
-1. Push to GitHub
-2. Connect repository to Railway
-3. Deploy automatically
+#### Alternative Platforms:
+- **Render**: See `RENDER_DEPLOYMENT.md`
+- **Railway**: Auto-deploy from GitHub
 
-See `RENDER_DEPLOYMENT.md` for detailed Render instructions.
+See `DIGITALOCEAN_DEPLOYMENT.md` for detailed instructions.
 
 ## Environment Variables
 
