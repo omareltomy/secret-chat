@@ -1,7 +1,7 @@
 {
   "name": "secure-chat-app",
   "version": "1.0.0",
-  "description": "End-to-end encrypted chat application with RSA encryption - Optimized for DigitalOcean App Platform",
+  "description": "End-to-end encrypted chat application with RSA encryption - Production ready for DigitalOcean",
   "main": "server.js",
   "type": "module",
   "engines": {
@@ -12,9 +12,10 @@
     "start": "node server.js",
     "dev": "nodemon server.js",
     "build": "echo 'No build step required'",
-    "test": "echo 'No tests specified'"
+    "test": "echo 'No tests specified'",
+    "postinstall": "echo 'Dependencies installed successfully'"
   },
-  "keywords": ["chat", "socket.io", "encryption", "real-time", "digitalocean"],
+  "keywords": ["chat", "socket.io", "encryption", "real-time", "digitalocean", "production"],
   "author": "Your Name",
   "license": "MIT",
   "dependencies": {
@@ -23,5 +24,10 @@
   },
   "devDependencies": {
     "nodemon": "^3.1.10"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/secure-chat-app.git"
+  },
+  "homepage": "https://your-app.ondigitalocean.app"
 }

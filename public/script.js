@@ -166,28 +166,18 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
+
+socket.on('uid', (id) => {
+    myId = id;
+});
+
+socket.on('room-created', (data) => {
     currentRoomId = data.roomId;
     userCount = data.userCount;
     showRoomInfo();
 });
 
 socket.on('room-joined', async (data) => {
-    currentRoomId = data.roomId;
-    userCount = data.userCount;
-    
-    // Import other user's public key if available
-    if (data.otherUserPublicKey) {
-        otherUserPublicKey = await importPublicKey(data.otherUserPublicKey);
-    }
-    
-    showRoomInfo();
-    
-    if (data.userCount === 2) {
-        showChat();
-    }
-});
-
-socket.on('user-joined', async (data) => {
     userCount = data.userCount;
     
     // Import the new user's public key
