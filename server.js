@@ -43,6 +43,7 @@ const corsOptions = {
     origin: NODE_ENV === 'production' 
         ? [
             process.env.CLIENT_URL, 
+            /\.herokuapp\.com$/,
             /\.digitaloceanspaces\.com$/,
             /\.ondigitalocean\.app$/,
             /\.do\.co$/,
@@ -199,7 +200,7 @@ httpServer.listen(PORT, '0.0.0.0', () => {
     console.log(`🚀 Secret Chat server running on port ${PORT}`);
     console.log(`🌐 Environment: ${NODE_ENV}`);
     console.log(`📁 Serving static files from: ${path.join(__dirname, 'public')}`);
-    console.log(`🔗 Access your app at: http://localhost:${PORT}`);
+    console.log(`🔗 CLIENT_URL: ${process.env.CLIENT_URL || 'Not set'}`);
     
     // Verify public directory exists
     const publicPath = path.join(__dirname, 'public');
@@ -210,4 +211,13 @@ httpServer.listen(PORT, '0.0.0.0', () => {
     } else {
         console.log(`❌ Public directory not found: ${publicPath}`);
     }
-})
+    
+    // Log environment variables for debugging
+    console.log(`🔧 Environment variables:`);
+    console.log(`   NODE_ENV: ${process.env.NODE_ENV}`);
+    console.log(`   PORT: ${process.env.PORT}`);
+    console.log(`   CLIENT_URL: ${process.env.CLIENT_URL}`);
+}).on('error', (err) => {
+    console.error(`❌ Server failed to start:`, err);
+    process.exit(1);
+});

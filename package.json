@@ -1,12 +1,12 @@
 {
-  "name": "secure-chat-app",
+  "name": "secret-chat",
   "version": "1.0.0",
   "description": "End-to-end encrypted chat application with RSA encryption - Production ready for DigitalOcean",
   "main": "server.js",
   "type": "module",
   "engines": {
-    "node": ">=18.0.0",
-    "npm": ">=8.0.0"
+    "node": "18.x",
+    "npm": "8.x"
   },
   "scripts": {
     "start": "node server.js",
@@ -27,7 +27,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/yourusername/secure-chat-app.git"
+    "url": "https://github.com/omareltomy/secret-chat.git"
   },
   "homepage": "https://your-app.ondigitalocean.app"
 }
