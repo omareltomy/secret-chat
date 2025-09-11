@@ -1,0 +1,31 @@
+name: secret-chat
+services:
+- name: web
+  source_dir: /
+  github:
+    repo: omareltomy/secret-chat
+    branch: main
+  run_command: npm start
+  build_command: npm install --production
+  environment_slug: node-js
+  instance_count: 1
+  instance_size_slug: basic-xxs
+  envs:
+  - key: NODE_ENV
+    value: production
+  - key: PORT
+    value: "3000"
+  - key: CLIENT_URL
+    value: ${APP_URL}
+  http_port: 3000
+  health_check:
+    http_path: /health
+    initial_delay_seconds: 30
+    period_seconds: 10
+    timeout_seconds: 5
+    success_threshold: 1
+    failure_threshold: 3
+  routes:
+  - path: /
+    - Content-Type
+    - Authorization

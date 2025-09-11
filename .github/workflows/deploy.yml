@@ -1,0 +1,72 @@
+name: Deploy Secret Chat to DigitalOcean Droplet
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        
+    - name: Install dependencies
+      run: npm ci
+      
+    - name: Run tests (if any)
+      run: npm test --if-present
+      
+    - name: Deploy to DigitalOcean Droplet
+      uses: appleboy/ssh-action@v1.0.0
+      with:
+        host: ${{ secrets.DROPLET_IP }}
+        username: ${{ secrets.DROPLET_USER }}
+        key: ${{ secrets.DROPLET_SSH_KEY }}
+        script: |
+          # Navigate to project directory
+          cd /var/www/secret-chat || exit 1
+          
+          # Stop the application
+          pm2 stop secret-chat || echo "App not running"
+          
+          # Pull latest changes
+          git fetch origin
+          git reset --hard origin/main
+          
+          # Install dependencies
+          npm install --production
+          
+          # Create environment file if missing
+          if [ ! -f ".env" ]; then
+            echo "NODE_ENV=production" > .env
+            echo "PORT=3000" >> .env
+            echo "CLIENT_URL=http://${{ secrets.DROPLET_IP }}:3000" >> .env
+          fi
+          
+          # Start the application
+          pm2 start server.js --name "secret-chat" || pm2 restart secret-chat
+          
+          # Save PM2 configuration
+          pm2 save
+          
+          # Wait for app to start
+          sleep 5
+          
+          # Test the deployment
+          if curl -f http://localhost:3000/health; then
+            echo "✅ Deployment successful!"
+          else
+            echo "❌ Deployment failed!"
+            pm2 logs secret-chat --lines 10
+            exit 1
+          fi
