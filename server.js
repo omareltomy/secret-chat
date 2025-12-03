@@ -8,12 +8,14 @@ import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const app = express();
+// Environment variables
 const PORT = process.env.PORT || 3000;
 const NODE_ENV = process.env.NODE_ENV || 'development';
+const CLIENT_ORIGIN = process.env.CLIENT_ORIGIN || '*';
+
+const app = express();
 
 // Security middleware
-app.use(express.static('public'));
 app.disable('x-powered-by');
 
 // Serve static files
@@ -30,18 +32,29 @@ app.get('/health', (req, res) => {
 
 const httpServer = createServer(app);
 
-// Production-ready CORS configuration
+// Production-ready CORS configuration for DigitalOcean App Platform
+const getCorsOrigin = () => {
+    if (NODE_ENV === 'development' || CLIENT_ORIGIN === '*') {
+        return '*';
+    }
+    // Support comma-separated origins
+    if (CLIENT_ORIGIN.includes(',')) {
+        return CLIENT_ORIGIN.split(',').map(origin => origin.trim());
+    }
+    return CLIENT_ORIGIN;
+};
+
 const corsOptions = {
-    origin: NODE_ENV === 'production' 
-        ? [process.env.CLIENT_URL, /\.railway\.app$/, /\.up\.railway\.app$/]
-        : ['http://localhost:3000', 'http://127.0.0.1:3000'],
+    origin: getCorsOrigin(),
     methods: ["GET", "POST"],
-    credentials: true
+    credentials: CLIENT_ORIGIN !== '*'
 };
 
 const io = new Server(httpServer, { 
     cors: corsOptions,
-    transports: ['websocket', 'polling']
+    transports: ['websocket', 'polling'],
+    pingTimeout: 60000,
+    pingInterval: 25000
 });
 
 const rooms = new Map();
@@ -179,9 +192,18 @@ process.on('SIGINT', () => {
 });
 
 httpServer.listen(PORT, '0.0.0.0', () => {
-    console.log(`🚀 Server running on port ${PORT} in ${NODE_ENV} mode`);
+    console.log('='.repeat(50));
+    console.log(`🚀 Secret Chat Server Started Successfully`);
+    console.log('='.repeat(50));
+    console.log(`📍 Port: ${PORT}`);
     console.log(`🌐 Environment: ${NODE_ENV}`);
+    console.log(`🔗 CORS Origin: ${CLIENT_ORIGIN}`);
+    console.log(`⏰ Started at: ${new Date().toISOString()}`);
     if (NODE_ENV === 'development') {
-        console.log(`🔗 Local: http://localhost:${PORT}`);
+        console.log(`🔗 Local URL: http://localhost:${PORT}`);
     }
-})
+    console.log('='.repeat(50));
+}).on('error', (err) => {
+    console.error('❌ Server failed to start:', err.message);
+    process.exit(1);
+});

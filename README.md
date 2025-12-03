@@ -1,81 +1,71 @@
-# Secure Chat App
+# Secret Chat 🔐
 
-A real-time end-to-end encrypted chat application built with Socket.io and RSA encryption.
+A real-time, end-to-end encrypted chat application. Create private rooms, share links, and chat securely with RSA encryption.
 
 ## Features
 
-- 🔐 End-to-end encryption using RSA-OAEP
-- 🚀 Real-time messaging with Socket.io
-- 🎨 Modern UI with custom fonts
-- 📱 Mobile-responsive design
-- 🔒 Private rooms with unique IDs
-- 🌐 Production-ready deployment
+- **End-to-End Encryption** — RSA-OAEP 2048-bit encryption. Messages are encrypted on your device before being sent.
+- **Private Rooms** — Generate unique 12-character room IDs. Share a link, and only two people can join.
+- **Real-Time Messaging** — Powered by Socket.IO for instant message delivery.
+- **Zero Server Storage** — Messages are never stored. When you leave, they're gone.
+- **No Account Required** — Just open the app and start chatting.
+
+## Quick Start
+
+```bash
+# Clone
+git clone https://github.com/omareltomy/secret-chat.git
+cd secret-chat
+
+# Install
+npm install
+
+# Run
+npm start
+```
+
+Open [http://localhost:3000](http://localhost:3000)
+
+## How It Works
+
+1. **Create a Room** — Click to generate a new private room
+2. **Share the Link** — Copy and send the room link to someone
+3. **Chat Securely** — Once both users join, messages are encrypted end-to-end
 
 ## Tech Stack
 
-- **Backend**: Node.js, Express, Socket.io
-- **Frontend**: Vanilla JavaScript, HTML5, CSS3
-- **Encryption**: Web Crypto API (RSA-OAEP)
-- **Deployment**: Railway
+| Layer | Technology |
+|-------|------------|
+| Server | Node.js, Express, Socket.IO |
+| Client | Vanilla JS, HTML5, CSS3 |
+| Encryption | Web Crypto API (RSA-OAEP) |
 
-## Getting Started
+## Deployment
 
-### Prerequisites
-
-- Node.js >= 18.0.0
-- npm >= 8.0.0
-
-### Installation
-
-1. Clone the repository:
-```bash
-git clone <your-repo-url>
-cd socket-chat
-```
-
-2. Install dependencies:
-```bash
-npm install
-```
-
-3. Start the development server:
-```bash
-npm run dev
-```
-
-4. Open http://localhost:3000 in your browser
-
-### Production Deployment
-
-The app is configured for deployment on Railway:
+### DigitalOcean App Platform
 
 1. Push to GitHub
-2. Connect repository to Railway
-3. Deploy automatically
+2. Create new App in DigitalOcean
+3. Connect your repository
+4. Add environment variable: `CLIENT_ORIGIN=*`
+5. Deploy
 
-## Environment Variables
+### Environment Variables
 
-Create a `.env` file based on `.env.example`:
-
-```bash
-NODE_ENV=production
-PORT=3000
-CLIENT_URL=https://your-app-name.up.railway.app
-```
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `PORT` | Server port | `3000` |
+| `NODE_ENV` | Environment | `development` |
+| `CLIENT_ORIGIN` | CORS allowed origin | `*` |
 
 ## Security
 
-- All messages are encrypted end-to-end using RSA-OAEP
-- Private keys never leave the client
-- XSS protection through proper text rendering
-- CORS configured for production
-
-## Scripts
-
-- `npm start` - Start production server
-- `npm run dev` - Start development server with nodemon
-- `npm run build` - No build step required (static assets)
+- RSA-OAEP 2048-bit encryption
+- Private keys never leave the browser
+- No message persistence
+- XSS protection via `textContent`
+- Configurable CORS
 
 ## License
 
-MIT License
+MIT

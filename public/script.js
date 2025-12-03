@@ -165,62 +165,64 @@ document.addEventListener('DOMContentLoaded', () => {
             connectionStatus.style.color = '#28a745';
         }
     });
-});
-    currentRoomId = data.roomId;
-    userCount = data.userCount;
-    showRoomInfo();
-});
 
-socket.on('room-joined', async (data) => {
-    currentRoomId = data.roomId;
-    userCount = data.userCount;
-    
-    // Import other user's public key if available
-    if (data.otherUserPublicKey) {
-        otherUserPublicKey = await importPublicKey(data.otherUserPublicKey);
-    }
-    
-    showRoomInfo();
-    
-    if (data.userCount === 2) {
-        showChat();
-    }
-});
+    socket.on('room-created', (data) => {
+        currentRoomId = data.roomId;
+        userCount = data.userCount;
+        showRoomInfo();
+    });
 
-socket.on('user-joined', async (data) => {
-    userCount = data.userCount;
-    
-    // Import the new user's public key
-    if (data.publicKey) {
-        otherUserPublicKey = await importPublicKey(data.publicKey);
-    }
-    
-    showRoomInfo();
-    
-    if (data.userCount === 2) {
-        showChat();
-        addMessage("Someone joined the chat!", false, true);
-    }
-});
+    socket.on('room-joined', async (data) => {
+        currentRoomId = data.roomId;
+        userCount = data.userCount;
+        
+        // Import other user's public key if available
+        if (data.otherUserPublicKey) {
+            otherUserPublicKey = await importPublicKey(data.otherUserPublicKey);
+        }
+        
+        showRoomInfo();
+        
+        if (data.userCount === 2) {
+            showChat();
+        }
+    });
 
-socket.on('user-left', () => {
-    userCount = 1;
-    otherUserPublicKey = null;
-    hideChat();
-    addMessage("Other user left", false, true);
-});
+    socket.on('user-joined', async (data) => {
+        userCount = data.userCount;
+        
+        // Import the new user's public key
+        if (data.publicKey) {
+            otherUserPublicKey = await importPublicKey(data.publicKey);
+        }
+        
+        showRoomInfo();
+        
+        if (data.userCount === 2) {
+            showChat();
+            addMessage("Someone joined the chat!", false, true);
+        }
+    });
 
-socket.on('message-to-room', async (data) => {
-    if (data.encryptedMessage && myKeyPair) {
-        const decryptedMessage = await decryptMessage(data.encryptedMessage, myKeyPair.privateKey);
-        addMessage(decryptedMessage, false);
-    } else if (data.message) {
-        addMessage(data.message, false);
-    }
-});
+    socket.on('user-left', () => {
+        userCount = 1;
+        otherUserPublicKey = null;
+        hideChat();
+        addMessage("Other user left", false, true);
+    });
 
-socket.on('room-full', (roomId) => {
-    alert(`Room ${roomId} is full!`);
+    socket.on('message-to-room', async (data) => {
+        if (data.encryptedMessage && myKeyPair) {
+            const decryptedMessage = await decryptMessage(data.encryptedMessage, myKeyPair.privateKey);
+            addMessage(decryptedMessage, false);
+        } else if (data.message) {
+            addMessage(data.message, false);
+        }
+    });
+
+    socket.on('room-full', (roomId) => {
+        alert(`Room ${roomId} is full!`);
+    });
 });
 
 // Helper functions
